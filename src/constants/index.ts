@@ -1,0 +1,1 @@
+export const INJECT_PROPERTY_KEY = Symbol('INJECT_PROPERTY_KEY');
