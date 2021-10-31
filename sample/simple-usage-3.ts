@@ -3,24 +3,24 @@ import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
 
 @Entity({
-  title: 'SimpleUsage2',
+  title: 'SimpleUsage3',
 })
 /**
- * @class SimpleUsage2
+ * @class SimpleUsage3
  */
-export class SimpleUsage2 {
-  @Type({ type: Number })
+export class SimpleUsage3 {
+  @Type
   public id: number;
 
   @Type({
     flags: FlagDiscriminator.includes(
       {
-        value: 1,
-        type: SimpleBoy,
-      },
-      {
         value: 0,
         type: SimpleGirl,
+      },
+      {
+        value: 1,
+        type: SimpleBoy,
       }
     ),
   })
@@ -35,12 +35,12 @@ export class SimpleUsage2 {
         },
       },
       {
-        type: SimpleBoy,
+        type: SimpleGirl,
         where: {
           sex: 0,
         },
       }
     ),
   })
-  public children: SimpleGirl | SimpleBoy;
+  public children: SimpleGirl[] | SimpleBoy[];
 }
