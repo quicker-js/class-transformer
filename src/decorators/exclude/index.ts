@@ -1,6 +1,8 @@
 import { ExcludeMetadata, ExcludeMetadataOption } from './exclude-metadata';
 import { PropertyMirror } from '@quicker-js/class-decorator';
 
+export * from './exclude-metadata';
+
 /**
  * Exclude 无参数装饰器
  * @param target

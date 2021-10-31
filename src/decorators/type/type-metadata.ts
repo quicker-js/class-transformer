@@ -1,39 +1,37 @@
-import {
-  ClassConstructor,
-  PropertyMetadata,
-} from '@quicker-js/class-decorator';
+import { PropertyMetadata } from '@quicker-js/class-decorator';
+import { Flag, FlagDiscriminator, SubTypeDiscriminator } from '../../lib';
 
 /**
  * @class TypeMetadata
  * Type装饰器的元数据类
  */
-export class TypeMetadata<
-  C extends ClassConstructor,
-  T = TypeMetadataOption<C>
-> extends PropertyMetadata<T> {
-  /**
-   * 构造函数
-   * @param type
-   * @param metadata
-   */
-  public constructor(public type: C | undefined, metadata: T) {
-    super(metadata);
-  }
+export class TypeMetadata<T = TypeMetadataOption> extends PropertyMetadata<T> {}
+
+export type TypeMetadataOption =
+  | TypeMetadataFlagOption
+  | TypeMetadataSubTypeOption
+  | TypeMetadataTypeOption;
+
+export interface OwnTypeMetadataOption {
+  readonly title?: string;
+  readonly description?: string;
+  readonly format?: string;
 }
 
-export interface TypeMetadataOption<T extends ClassConstructor> {
-  readonly constructor?: T;
-  readonly discriminator?: Discriminator;
+export interface TypeMetadataFlagOption extends OwnTypeMetadataOption {
+  readonly flags?: Map<Flag, FlagDiscriminator>;
+  readonly subTypes?: never;
+  readonly type?: never;
 }
 
-interface Discriminator {
-  readonly property: string | symbol;
-  subTypes: SubTypes;
+export interface TypeMetadataSubTypeOption extends OwnTypeMetadataOption {
+  readonly flags?: never;
+  readonly subTypes?: SubTypeDiscriminator[];
+  readonly type?: never;
 }
 
-type SubTypes =
-  | Array<{
-      value: ClassConstructor;
-      name: string | symbol;
-    }>
-  | Map<string | symbol, ClassConstructor>;
+export interface TypeMetadataTypeOption extends OwnTypeMetadataOption {
+  readonly flags?: never;
+  readonly subTypes?: never;
+  readonly type?: Function;
+}
