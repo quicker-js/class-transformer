@@ -42,10 +42,10 @@
     "prettier": "^2.4.1",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.3.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "typedoc": "^0.22.7"
   },
   "dependencies": {
-    "@quicker-js/class-decorator": "^0.0.1-dev.2021102603",
-    "typedoc": "^0.22.7"
+    "@quicker-js/class-decorator": "^0.0.1-dev.2021103102"
   }
 }
