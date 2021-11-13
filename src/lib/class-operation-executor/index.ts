@@ -92,16 +92,28 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
       return Promise.resolve(value);
     } else if (ClassOperationExecutor.equal(targetType, Map)) {
       if (this.type === TransformationType.PLAIN_TO_INSTANCE) {
-        const map = new Map();
+        const map = new Map<any, any>();
         if (typeof value === 'object') {
           if (value instanceof Map) {
-            value.forEach((v, k) => map.set(k, v));
+            value.forEach((v, k) =>
+              map.set(k, elementType ? this.transform(elementType, null, v) : v)
+            );
           } else {
             Object.getOwnPropertyNames(value).forEach((key) => {
-              map.set(key, value[key]);
+              map.set(
+                key,
+                elementType
+                  ? this.transform(elementType, null, value[key])
+                  : value[key]
+              );
             });
             Object.getOwnPropertySymbols(value).forEach((key) => {
-              map.set(key, value[key]);
+              map.set(
+                key,
+                elementType
+                  ? this.transform(elementType, null, value[key])
+                  : value[key]
+              );
             });
           }
         }
@@ -110,11 +122,22 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
         if (value instanceof Map) {
           const o: Record<PropertyKey, any> = {};
           value.forEach((v, k) => {
-            o[k] = v;
+            o[k] = elementType ? this.transform(elementType, null, v) : v;
           });
           return o;
         } else {
-          return Object.assign({}, value);
+          const newVal: Record<PropertyKey, any> = {};
+          Object.getOwnPropertyNames(value).forEach((key) => {
+            newVal[key] = elementType
+              ? this.transform(elementType, null, value[key])
+              : value[key];
+          });
+          Object.getOwnPropertySymbols(value).forEach((key) => {
+            newVal[key] = elementType
+              ? this.transform(elementType, null, value[key])
+              : value[key];
+          });
+          return Object.assign({}, newVal);
         }
       }
     } else if (ClassOperationExecutor.equal(targetType, Array)) {
@@ -240,6 +263,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                     type,
                     data
                   );
+
                   instance[key] = ClassOperationExecutor.create({
                     scene: undefined,
                     classTransformer: this.classTransformer,
@@ -328,7 +352,12 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
   ): ClassConstructor {
     const designType = mirror.getDesignType();
 
-    if (designType === Array || designType === Set || designType === Promise) {
+    if (
+      designType === Array ||
+      designType === Set ||
+      designType === Map ||
+      designType === Promise
+    ) {
       targetType = designType as ClassConstructor;
     }
 
