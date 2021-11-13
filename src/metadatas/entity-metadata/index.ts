@@ -3,7 +3,7 @@ import { SceneImpl } from '../../lib';
 
 /**
  * 实体装饰器元数据类
- * @class Index
+ * @class EntityMetadata
  */
 export class EntityMetadata<
   T = EntityMetadataOption
@@ -26,12 +26,4 @@ export interface EntityMetadataOption {
    * subTypes 用于范型类匹配 subType 使用
    */
   readonly subTypes?: Record<PropertyKey, any>[];
-  /**
-   * 默认false
-   */
-  toPlainOnly?: boolean;
-  /**
-   * 默认false
-   */
-  toInstanceOnly?: boolean;
 }

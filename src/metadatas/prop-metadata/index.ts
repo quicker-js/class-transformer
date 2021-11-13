@@ -14,42 +14,43 @@ export class PropMetadata<
 > extends PropertyMetadata<T> {}
 
 export interface BasePropMetadata {
-  name?: string;
-  toPlainOnly?: boolean;
-  toInstanceOnly?: boolean;
+  readonly description?: string;
+  readonly name?: string;
+  readonly toPlainOnly?: boolean;
+  readonly toInstanceOnly?: boolean;
 }
 
 export interface PropTypeMetadata extends BasePropMetadata {
-  type?: ClassConstructor;
-  scenes?: never;
-  transform?: never;
-  subTypes?: never;
+  readonly type?: ClassConstructor;
+  readonly scenes?: never;
+  readonly transform?: never;
+  readonly subTypes?: never;
 }
 
 export interface PropSceneMetadata extends BasePropMetadata {
-  type?: never;
-  scenes?: Scene[];
-  transform?: never;
-  subTypes?: never;
+  readonly type?: never;
+  readonly scenes?: Scene[];
+  readonly transform?: never;
+  readonly subTypes?: never;
 }
 
 export interface PropSubTypeMetadata extends BasePropMetadata {
-  type?: never;
-  scenes?: never;
-  transform?: never;
-  subTypes?: SubType[];
+  readonly type?: never;
+  readonly scenes?: never;
+  readonly transform?: never;
+  readonly subTypes?: SubType[];
 }
 
 export interface PropTransformMetadata extends BasePropMetadata {
-  type?: never;
-  scenes?: never;
-  transform?: (
+  readonly type?: never;
+  readonly scenes?: never;
+  readonly transform?: (
     value: any,
     object: any,
     propertyMirror: PropertyMirror,
     classMirror: ClassMirror
   ) => any;
-  subTypes?: never;
+  readonly subTypes?: never;
 }
 
 export type PropMetadataImpl =
