@@ -122,7 +122,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
         if (Array.isArray(value)) {
           return value.map((o) => this.transform(elementType, null, o));
         } else {
-          return [this.transform(elementType, null, value)];
+          return undefined;
         }
       }
     } else if (Array.isArray(value)) {
@@ -210,8 +210,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                       result = Array.from(data).map((item) =>
                         this.handlerSubType(subTypes, item)
                       );
-                    } else {
-                      result = [this.handlerSubType(subTypes, data)];
                     }
                   } else if (
                     ClassOperationExecutor.equal(mirror.getDesignType(), Set)
@@ -228,13 +226,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                             this.handlerSubType(subTypes, item)
                           )
                         );
-                      }
-                    } else {
-                      if (this.type === TransformationType.INSTANCE_TO_PLAIN) {
-                        // 转plain 始终都只能是Array 否则无法转换成json
-                        result = [this.handlerSubType(subTypes, data)];
-                      } else {
-                        result = new Set([this.handlerSubType(subTypes, data)]);
                       }
                     }
                   } else {

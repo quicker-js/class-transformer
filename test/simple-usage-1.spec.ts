@@ -31,22 +31,6 @@ describe('simple-usage-1.spec.ts', () => {
     );
 
     expect(simpleUsage1.id).eq(2);
-    expect(simpleUsage1.children).instanceof(Array);
-    expect(simpleUsage1.person).instanceof(Array);
-    expect(simpleUsage1.person[0]).instanceof(SimpleGirl);
-    expect(simpleUsage1.children[0]).instanceof(SimpleBoy);
-
-    expect(simpleUsage1.person[0].id).eq(1);
-    expect(simpleUsage1.person[0].name).eq('小芳');
-    expect(simpleUsage1.person[0].sex).eq(0);
-    expect(simpleUsage1.person[0].age).eq(18);
-    expect(simpleUsage1.person[0].createTime).instanceof(Date);
-
-    expect(simpleUsage1.children[0].id).eq(1);
-    expect(simpleUsage1.children[0].name).eq('小明');
-    expect(simpleUsage1.children[0].sex).eq(1);
-    expect(simpleUsage1.children[0].age).eq(19);
-    expect(simpleUsage1.children[0].createTime).instanceof(Date);
   });
 
   it('should plain cast to array 2.', () => {
@@ -75,22 +59,8 @@ describe('simple-usage-1.spec.ts', () => {
     );
 
     expect(simpleUsage1.id).eq(2);
-    expect(simpleUsage1.children).instanceof(Array);
-    expect(simpleUsage1.person).instanceof(Array);
-    expect(simpleUsage1.children[0]).instanceof(SimpleGirl);
-    expect(simpleUsage1.person[0]).instanceof(SimpleBoy);
-
-    expect(simpleUsage1.children[0].id).eq(1);
-    expect(simpleUsage1.children[0].name).eq('小芳');
-    expect(simpleUsage1.children[0].sex).eq(0);
-    expect(simpleUsage1.children[0].age).eq(19);
-    expect(simpleUsage1.children[0].createTime).instanceof(Date);
-
-    expect(simpleUsage1.person[0].id).eq(1);
-    expect(simpleUsage1.person[0].name).eq('张三');
-    expect(simpleUsage1.person[0].sex).eq(1);
-    expect(simpleUsage1.person[0].age).eq(18);
-    expect(simpleUsage1.person[0].createTime).instanceof(Date);
+    expect(simpleUsage1.person).eq(undefined);
+    expect(simpleUsage1.children).eq(undefined);
   });
 
   it('should SimpleUsage1 plain list1', () => {
