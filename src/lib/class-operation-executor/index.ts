@@ -164,6 +164,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
     classMirror.allInstanceMembers.forEach((mirror, key) => {
       if (mirror instanceof PropertyMirror) {
         mirror.allMetadata.forEach((e) => {
+          const defaultValue = instance[key];
           // 有元数据
           if (e instanceof PropMetadata) {
             if (e.metadata) {
@@ -256,7 +257,12 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                   }
                   instance[key] = result;
                 } else if (transform) {
-                  instance[key] = transform(data, value, mirror, classMirror);
+                  instance[key] = transform(
+                    data || defaultValue,
+                    value,
+                    mirror,
+                    classMirror
+                  );
                 } else if (type) {
                   const _targetType = ClassOperationExecutor.parseType(
                     mirror,
@@ -284,6 +290,10 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                 value && value[key]
               );
             }
+          }
+
+          if (defaultValue !== undefined && instance[key] === undefined) {
+            instance[key] = defaultValue;
           }
         });
       }
