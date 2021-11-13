@@ -101,10 +101,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@quicker-js/class-decorator@^0.0.1-dev.2021110301":
-  version "0.0.1-dev.2021110301"
-  resolved "https://registry.yarnpkg.com/@quicker-js/class-decorator/-/class-decorator-0.0.1-dev.2021110301.tgz#cf9940b2a8fa97146a212cfaacb1f40d2adb8785"
-  integrity sha512-4EHqsG5WiFSbIMntAxOIqQva8x4kODdc6+tLcVZmTnxJo/QZ4tWlLRCYJJzJnlNhgVXK0qAWflzKCeFXp5poxw==
+"@quicker-js/class-decorator@^0.0.1-dev.2021111301":
+  version "0.0.1-dev.2021111301"
+  resolved "https://registry.yarnpkg.com/@quicker-js/class-decorator/-/class-decorator-0.0.1-dev.2021111301.tgz#8a2a856e1a602692e2886966ad6fecee63103f9e"
+  integrity sha512-Z2srl2sRRbhRE3CfP9EJViZ+hOJC0osY6UYmLoPNfjO0e6XeUCZDgRPzfOTQOe18NILBxGP7Cn2m9oHzU8ciHg==
   dependencies:
     rimraf "^3.0.2"
 
