@@ -1,51 +1,191 @@
 import 'reflect-metadata';
 import { describe, it } from 'mocha';
+import classTransformer from '../src';
+import { SimpleBoy, SimpleGirl, SimpleUsage1 } from '../sample';
 import { expect } from 'chai';
-import { ClassTransformer } from '../src';
-import { SimplePerson, SimpleUsage1 } from '../sample';
 
 describe('simple-usage-1.spec.ts', () => {
-  const classTransformer = new ClassTransformer({
-    flag: 1,
+  it('should plain cast to array 1.', () => {
+    const simpleUsage1 = classTransformer.plainToInstance(
+      SimpleUsage1,
+      {
+        id: 2,
+        person: {
+          id: 1,
+          name: '小芳',
+          sex: 0,
+          age: 18,
+          createTime: '2020/01/01',
+        },
+        children: {
+          id: 1,
+          name: '小明',
+          sex: 1,
+          age: 19,
+          createTime: '2020/01/01',
+        },
+      },
+      {
+        scene: 0,
+      }
+    );
+
+    expect(simpleUsage1.id).eq(2);
+    expect(simpleUsage1.children).instanceof(Array);
+    expect(simpleUsage1.person).instanceof(Array);
+    expect(simpleUsage1.person[0]).instanceof(SimpleGirl);
+    expect(simpleUsage1.children[0]).instanceof(SimpleBoy);
+
+    expect(simpleUsage1.person[0].id).eq(1);
+    expect(simpleUsage1.person[0].name).eq('小芳');
+    expect(simpleUsage1.person[0].sex).eq(0);
+    expect(simpleUsage1.person[0].age).eq(18);
+    expect(simpleUsage1.person[0].createTime).instanceof(Date);
+
+    expect(simpleUsage1.children[0].id).eq(1);
+    expect(simpleUsage1.children[0].name).eq('小明');
+    expect(simpleUsage1.children[0].sex).eq(1);
+    expect(simpleUsage1.children[0].age).eq(19);
+    expect(simpleUsage1.children[0].createTime).instanceof(Date);
   });
 
-  it('should SimpleUsage1.', function () {
-    const simpleUsage = classTransformer.plainToInstance(SimpleUsage1, {
-      id: 1,
-      person: {
-        id: 103,
-        age: 18,
-        name: '张三',
-        test: '124',
-      },
-      children: [
-        {
-          id: 201,
-          name: '菜单1',
-          age: 20,
-          sex: 0,
-          test: /^test/,
-        },
-        {
-          id: 202,
-          name: '菜单1',
-          age: 18,
+  it('should plain cast to array 2.', () => {
+    const simpleUsage1 = classTransformer.plainToInstance(
+      SimpleUsage1,
+      {
+        id: 2,
+        person: {
+          id: 1,
+          name: '张三',
           sex: 1,
-          test: new RegExp('^name$', 'g'),
+          age: 18,
+          createTime: '2020/01/01',
         },
-      ],
-    });
+        children: {
+          id: 1,
+          name: '小芳',
+          sex: 0,
+          age: 19,
+          createTime: '2020/01/01',
+        },
+      },
+      {
+        scene: 1,
+      }
+    );
 
-    expect(simpleUsage.id).eq(1);
-    expect(simpleUsage.person).instanceof(Array);
-    expect(simpleUsage.children).instanceof(Array);
+    expect(simpleUsage1.id).eq(2);
+    expect(simpleUsage1.children).instanceof(Array);
+    expect(simpleUsage1.person).instanceof(Array);
+    expect(simpleUsage1.children[0]).instanceof(SimpleGirl);
+    expect(simpleUsage1.person[0]).instanceof(SimpleBoy);
 
-    simpleUsage.children.map((o) => {
-      expect(o).instanceof(SimplePerson);
-    });
+    expect(simpleUsage1.children[0].id).eq(1);
+    expect(simpleUsage1.children[0].name).eq('小芳');
+    expect(simpleUsage1.children[0].sex).eq(0);
+    expect(simpleUsage1.children[0].age).eq(19);
+    expect(simpleUsage1.children[0].createTime).instanceof(Date);
 
-    simpleUsage.person.map((o) => {
-      expect(o).instanceof(SimplePerson);
-    });
+    expect(simpleUsage1.person[0].id).eq(1);
+    expect(simpleUsage1.person[0].name).eq('张三');
+    expect(simpleUsage1.person[0].sex).eq(1);
+    expect(simpleUsage1.person[0].age).eq(18);
+    expect(simpleUsage1.person[0].createTime).instanceof(Date);
+  });
+
+  it('should SimpleUsage1 plain list1', () => {
+    const simpleUsage1 = classTransformer.plainToInstance(
+      SimpleUsage1,
+      {
+        id: 2,
+        person: [
+          {
+            id: 1,
+            name: '张三',
+            sex: 1,
+            age: 18,
+            createTime: '2020/01/01',
+          },
+        ],
+        children: [
+          {
+            id: 1,
+            name: '小芳',
+            sex: 0,
+            age: 19,
+            createTime: '2020/01/01',
+          },
+        ],
+      },
+      {
+        scene: 1,
+      }
+    );
+
+    expect(simpleUsage1.id).eq(2);
+    expect(simpleUsage1.children).instanceof(Array);
+    expect(simpleUsage1.person).instanceof(Array);
+    expect(simpleUsage1.children[0]).instanceof(SimpleGirl);
+    expect(simpleUsage1.person[0]).instanceof(SimpleBoy);
+
+    expect(simpleUsage1.children[0].id).eq(1);
+    expect(simpleUsage1.children[0].name).eq('小芳');
+    expect(simpleUsage1.children[0].sex).eq(0);
+    expect(simpleUsage1.children[0].age).eq(19);
+    expect(simpleUsage1.children[0].createTime).instanceof(Date);
+
+    expect(simpleUsage1.person[0].id).eq(1);
+    expect(simpleUsage1.person[0].name).eq('张三');
+    expect(simpleUsage1.person[0].sex).eq(1);
+    expect(simpleUsage1.person[0].age).eq(18);
+    expect(simpleUsage1.person[0].createTime).instanceof(Date);
+  });
+
+  it('should SimpleUsage1 plain list2', () => {
+    const simpleUsage1 = classTransformer.plainToInstance(
+      SimpleUsage1,
+      {
+        id: 2,
+        person: [
+          {
+            id: 1,
+            name: '小芳',
+            sex: 0,
+            age: 18,
+            createTime: '2020/01/01',
+          },
+        ],
+        children: [
+          {
+            id: 1,
+            name: '小明',
+            sex: 1,
+            age: 19,
+            createTime: '2020/01/01',
+          },
+        ],
+      },
+      {
+        scene: 0,
+      }
+    );
+
+    expect(simpleUsage1.id).eq(2);
+    expect(simpleUsage1.children).instanceof(Array);
+    expect(simpleUsage1.person).instanceof(Array);
+    expect(simpleUsage1.person[0]).instanceof(SimpleGirl);
+    expect(simpleUsage1.children[0]).instanceof(SimpleBoy);
+
+    expect(simpleUsage1.person[0].id).eq(1);
+    expect(simpleUsage1.person[0].name).eq('小芳');
+    expect(simpleUsage1.person[0].sex).eq(0);
+    expect(simpleUsage1.person[0].age).eq(18);
+    expect(simpleUsage1.person[0].createTime).instanceof(Date);
+
+    expect(simpleUsage1.children[0].id).eq(1);
+    expect(simpleUsage1.children[0].name).eq('小明');
+    expect(simpleUsage1.children[0].sex).eq(1);
+    expect(simpleUsage1.children[0].age).eq(19);
+    expect(simpleUsage1.children[0].createTime).instanceof(Date);
   });
 });

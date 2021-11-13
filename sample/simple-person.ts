@@ -1,4 +1,5 @@
-import { Entity, Type } from '../src';
+import { Entity, Prop } from '../src';
+import moment from 'moment';
 
 @Entity({
   title: 'SimplePerson',
@@ -8,15 +9,28 @@ import { Entity, Type } from '../src';
  * @class SimplePerson
  */
 export class SimplePerson {
-  @Type
+  @Prop.default
   public sex: number;
 
-  @Type
+  @Prop.default
   public id: number;
 
-  @Type
+  @Prop({
+    type: Number,
+    toInstanceOnly: true,
+  })
+  @Prop({
+    type: String,
+    toPlainOnly: true,
+  })
   public age: number;
 
-  @Type
+  @Prop.default
   public name: string;
+
+  @Prop({
+    transform: (value) => moment(value).format('YYYY-MM-DD'),
+    toPlainOnly: true,
+  })
+  public createTime: Date;
 }

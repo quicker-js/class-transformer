@@ -1,6 +1,6 @@
-import { Entity, FlagDiscriminator, SubTypeDiscriminator, Type } from '../src';
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
+import { Entity, Scene, Prop, SubType } from '../src';
 
 @Entity({
   title: 'SimpleUsage3',
@@ -9,11 +9,11 @@ import { SimpleGirl } from './simple-girl';
  * @class SimpleUsage3
  */
 export class SimpleUsage3 {
-  @Type
+  @Prop.default
   public id: number;
 
-  @Type({
-    flags: FlagDiscriminator.includes(
+  @Prop({
+    scenes: Scene.from(
       {
         value: 0,
         type: SimpleGirl,
@@ -26,8 +26,8 @@ export class SimpleUsage3 {
   })
   public person: SimpleBoy | SimpleGirl;
 
-  @Type({
-    subTypes: SubTypeDiscriminator.includes(
+  @Prop({
+    subTypes: SubType.from(
       {
         type: SimpleBoy,
         where: {

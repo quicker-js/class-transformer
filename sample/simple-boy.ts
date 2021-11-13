@@ -1,13 +1,11 @@
 import { SimplePerson } from './simple-person';
-import { Entity, FlagDiscriminator, SubTypeDiscriminator } from '../src';
+import { Entity } from '../src';
 
 @Entity({
   title: 'SimpleBoy',
   description: 'SimpleBoy类',
-  flags: FlagDiscriminator.define({
-    value: 'SimpleBoy',
-  }),
-  includes: SubTypeDiscriminator.define(
+  scenes: [{ value: 'SimpleBoy' }],
+  subTypes: [
     {
       sex: 1,
     },
@@ -16,8 +14,8 @@ import { Entity, FlagDiscriminator, SubTypeDiscriminator } from '../src';
     },
     {
       sex: 'boy',
-    }
-  ),
+    },
+  ],
 })
 /**
  * @SimpleBoy

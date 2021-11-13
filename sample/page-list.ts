@@ -1,40 +1,50 @@
-import { Entity, FlagDiscriminator, Type } from '../src';
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
+import { Entity, Prop, Scene } from '../src';
 
 @Entity({
-  flags: FlagDiscriminator.define({
-    value: 'PageList<SimpleGirl>',
-    subFlag: 'SimpleGirl',
-  }),
+  scenes: [
+    {
+      value: 'PageList<SimpleGirl>',
+      subScene: 'SimpleGirl',
+    },
+  ],
 })
 /**
  * @class PageList<T>
  */
 export class PageList<T> {
-  @Type({
-    flags: FlagDiscriminator.includes(
+  @Prop({
+    scenes: Scene.from(
       {
-        value: 'SimpleBoy',
         type: SimpleBoy,
+        value: 'SimpleBoy',
       },
       {
-        value: 'SimpleGirl',
         type: SimpleGirl,
+        value: 'SimpleGirl',
       }
     ),
   })
   public list: T[];
 
-  @Type
+  @Prop({
+    type: Number,
+  })
   public pageNo: number;
 
-  @Type
+  @Prop({
+    type: Number,
+  })
   public pageSize: number;
 
-  @Type
+  @Prop({
+    type: Number,
+  })
   public totalCount: number;
 
-  @Type
+  @Prop({
+    type: Number,
+  })
   public totalPage: number;
 }

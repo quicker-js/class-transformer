@@ -1,4 +1,4 @@
 export enum TransformationType {
-  PLAIN_TO_CLASS,
-  CLASS_TO_PLAIN,
+  PLAIN_TO_INSTANCE,
+  INSTANCE_TO_PLAIN,
 }

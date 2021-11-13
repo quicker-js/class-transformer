@@ -1,53 +1,57 @@
-import { FlagDiscriminator, Type } from '../src';
 import { PageList } from './page-list';
 import { SimpleGirl } from './simple-girl';
 import { SimpleBoy } from './simple-boy';
+import { Scene, Prop } from '../src';
 
 /**
  * 响应数据类型
  */
 export class ResponseResult<T> {
-  @Type
+  @Prop.default
   public msg: string;
 
-  @Type
+  @Prop.default
   public code: number;
 
-  @Type({
-    flags: FlagDiscriminator.includes(
+  @Prop({
+    scenes: Scene.from(
       {
         type: PageList,
         value: 'PageList<SimpleBoy>',
-        subFlag: 'SimpleBoy',
+        subScene: 'SimpleBoy',
       },
       {
         type: PageList,
         value: 'PageList<SimpleGirl>',
-        subFlag: 'SimpleGirl',
+        subScene: 'SimpleGirl',
       },
       {
         type: SimpleGirl,
         value: 'SimpleGirl',
-        designType: Array,
       },
       {
-        type: SimpleGirl,
+        type: Set,
+        elementType: SimpleGirl,
+        value: 'Set<SimpleGirl>',
+      },
+      {
+        type: Array,
+        elementType: SimpleGirl,
         value: 'List<SimpleGirl>',
-        designType: Array,
       },
       {
         type: SimpleBoy,
         value: 'SimpleBoy',
       },
       {
-        type: SimpleBoy,
+        type: Array,
+        elementType: SimpleBoy,
         value: 'List<SimpleBoy>',
-        designType: Array,
       },
       {
-        type: SimpleBoy,
+        type: Set,
+        elementType: SimpleBoy,
         value: 'Set<SimpleBoy>',
-        designType: Set,
       }
     ),
   })

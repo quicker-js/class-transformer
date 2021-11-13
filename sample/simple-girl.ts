@@ -1,13 +1,11 @@
-import { Entity, FlagDiscriminator, SubTypeDiscriminator } from '../src';
 import { SimplePerson } from './simple-person';
+import { Entity } from '../src';
 
 @Entity({
   title: 'SimpleGirl',
   description: 'SimpleGirl Entity',
-  flags: FlagDiscriminator.define({
-    value: 'SimpleGirl',
-  }),
-  includes: SubTypeDiscriminator.define(
+  scenes: [{ value: 'SimpleGirl' }],
+  subTypes: [
     {
       sex: 0,
     },
@@ -16,8 +14,8 @@ import { SimplePerson } from './simple-person';
     },
     {
       sex: 'girl',
-    }
-  ),
+    },
+  ],
 })
 /**
  * @class SimpleGirl

@@ -1,153 +1,219 @@
 import 'reflect-metadata';
 import { describe, it } from 'mocha';
-import { ClassTransformer } from '../src';
+import classTransformer from '../src';
 import { PageList, ResponseResult, SimpleBoy, SimpleGirl } from '../sample';
+import { ClassConstructor } from '@quicker-js/class-decorator';
 import { expect } from 'chai';
 
 describe('response-result.spec.ts', () => {
-  it('should ResponseResult<PageList<SimpleGirl>>.', function () {
-    const classTransformer = new ClassTransformer({
-      flag: 'PageList<SimpleGirl>',
-    });
-
-    const responseResult = classTransformer.plainToInstance<
-      ResponseResult<PageList<SimpleGirl>>
-    >(ResponseResult, {
-      msg: 'ok',
-      code: 0,
-      data: {
-        pageNo: 1,
-        pageSize: 10,
-        totalCount: 10,
-        totalPage: 1,
-        list: [
+  it('should ResponseResult<SimpleBoy[]>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<SimpleBoy[]>>
+    >(
+      ResponseResult,
+      {
+        code: 1,
+        msg: 'ok',
+        data: [
           {
+            sex: 1,
             id: 1,
+            age: 10,
             name: '张三',
           },
         ],
       },
-    });
+      {
+        scene: 'List<SimpleBoy>',
+      }
+    );
 
-    expect(responseResult).instanceof(ResponseResult);
-    expect(responseResult.code).eq(0);
-    expect(responseResult.msg).eq('ok');
-    expect(responseResult.data).instanceof(PageList);
-
-    expect(responseResult.data.list).instanceof(Array);
-    expect(responseResult.data.pageNo).eq(1);
-    expect(responseResult.data.pageSize).eq(10);
-    expect(responseResult.data.totalCount).eq(10);
-    expect(responseResult.data.totalPage).eq(1);
-    responseResult.data.list.forEach((o) => {
-      expect(o.name).eq('张三');
-      expect(o).instanceof(SimpleGirl);
-    });
+    // expect(plainToInstance.msg).eq('ok');
+    // expect(plainToInstance.data).instanceof(Array);
+    // expect(plainToInstance.data[0]).instanceof(SimpleBoy);
+    // expect(plainToInstance.data[0].sex).eq(1);
+    // expect(plainToInstance.data[0].name).eq('张三');
+    // expect(plainToInstance.data[0].age).eq(10);
+    // expect(plainToInstance.data[0].id).eq(1);
+    // expect(plainToInstance.code).eq(1);
   });
 
-  it('should ResponseResult<SimpleGirl>.', function () {
-    const classTransformer = new ClassTransformer({
-      flag: 'SimpleGirl',
-    });
-
-    const responseResult = classTransformer.plainToInstance<
-      ResponseResult<SimpleGirl>
-    >(ResponseResult, {
-      msg: 'ok',
-      code: 0,
-      data: {
-        id: 1,
-        name: '张三',
+  it('should ResponseResult<SimpleBoy>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<SimpleBoy>>
+    >(
+      ResponseResult,
+      {
+        code: 1,
+        msg: 'ok',
+        data: {
+          sex: 1,
+          id: 1,
+          age: 10,
+          name: '张三',
+          createTime: '2020-12-30 01:00:00',
+        },
       },
-    });
+      {
+        scene: 'SimpleBoy',
+      }
+    );
 
-    expect(responseResult).instanceof(ResponseResult);
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.data).instanceof(SimpleBoy);
+    expect(plainToInstance.data.sex).eq(1);
+    expect(plainToInstance.data.age).eq(10);
+    expect(plainToInstance.data.id).eq(1);
+    expect(plainToInstance.data.name).eq('张三');
+    expect(plainToInstance.code).eq(1);
   });
 
-  it('should ResponseResult<PageList<SimpleBoy>>.', function () {
-    const classTransformer = new ClassTransformer({
-      flag: 'PageList<SimpleBoy>',
-    });
-
-    const responseResult = classTransformer.plainToInstance<
-      ResponseResult<PageList<SimpleBoy>>
-    >(ResponseResult, {
-      msg: 'ok',
-      code: 0,
-      data: {
-        pageNo: 1,
-        pageSize: 10,
-        totalCount: 10,
-        totalPage: 1,
-        list: [
+  it('should ResponseResult<SimpleGirl[]>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<SimpleGirl[]>>
+    >(
+      ResponseResult,
+      {
+        code: 1,
+        msg: 'ok',
+        data: [
           {
+            sex: 0,
             id: 1,
-            name: '张三',
+            age: 18,
+            name: '小芳',
           },
         ],
       },
-    });
+      {
+        scene: 'List<SimpleGirl>',
+      }
+    );
 
-    expect(responseResult).instanceof(ResponseResult);
-    expect(responseResult.code).eq(0);
-    expect(responseResult.msg).eq('ok');
-    expect(responseResult.data).instanceof(PageList);
-
-    expect(responseResult.data.list).instanceof(Array);
-    expect(responseResult.data.pageNo).eq(1);
-    expect(responseResult.data.pageSize).eq(10);
-    expect(responseResult.data.totalCount).eq(10);
-    expect(responseResult.data.totalPage).eq(1);
-    responseResult.data.list.forEach((o) => {
-      expect(o.name).eq('张三');
-      expect(o).instanceof(SimpleBoy);
-    });
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.data).instanceof(Array);
+    expect(plainToInstance.data[0]).instanceof(SimpleGirl);
+    expect(plainToInstance.data[0].sex).eq(0);
+    expect(plainToInstance.data[0].name).eq('小芳');
+    expect(plainToInstance.data[0].age).eq(18);
+    expect(plainToInstance.data[0].id).eq(1);
+    expect(plainToInstance.code).eq(1);
   });
 
-  it('should ResponseResult<List<SimpleBoy>>.', function () {
-    const classTransformer = new ClassTransformer({
-      flag: 'List<SimpleBoy>',
-    });
-
-    const responseResult = classTransformer.plainToInstance<
-      ResponseResult<SimpleBoy[]>
-    >(ResponseResult, {
-      code: 0,
-      msg: 'ok',
-      data: [
-        {
+  it('should ResponseResult<SimpleGirl>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<SimpleGirl>>
+    >(
+      ResponseResult,
+      {
+        code: 1,
+        msg: 'ok',
+        data: {
+          sex: 0,
           id: 1,
-          name: '测试',
           age: 10,
-          sex: 1,
+          name: '小芳',
         },
-      ],
-    });
+      },
+      {
+        scene: 'SimpleGirl',
+      }
+    );
 
-    expect(responseResult.data).instanceof(Array);
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.data).instanceof(SimpleGirl);
+    expect(plainToInstance.data.sex).eq(0);
+    expect(plainToInstance.data.age).eq(10);
+    expect(plainToInstance.data.id).eq(1);
+    expect(plainToInstance.data.name).eq('小芳');
+    expect(plainToInstance.code).eq(1);
   });
 
-  it('should ResponseResult<Set<SimpleBoy>>.', function () {
-    const classTransformer = new ClassTransformer({
-      flag: 'Set<SimpleBoy>',
-    });
-
-    const responseResult = classTransformer.plainToInstance<
-      ResponseResult<Set<SimpleBoy>>
-    >(ResponseResult, {
-      code: 0,
-      msg: 'ok',
-      data: [
-        {
-          id: 1,
-          name: '测试',
-          age: 10,
-          sex: 1,
+  it('should ResponseResult<SimpleGirl>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<PageList<SimpleGirl>>>
+    >(
+      ResponseResult,
+      {
+        msg: 'ok',
+        code: 0,
+        data: {
+          list: [
+            {
+              id: 1,
+              sex: 0,
+              name: '小芳',
+              age: 15,
+              createTime: '2020-12-12',
+            },
+          ],
+          pageNo: 1,
+          pageSize: 10,
+          totalCount: 1,
+          totalPage: 1,
         },
-      ],
-    });
+      },
+      {
+        scene: 'PageList<SimpleGirl>',
+      }
+    );
 
-    expect(responseResult).instanceof(ResponseResult);
-    expect(responseResult.data).instanceof(Set);
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.code).eq(0);
+    expect(plainToInstance.data).instanceof(PageList);
+    expect(plainToInstance.data.list).instanceof(Array);
+    expect(plainToInstance.data.pageNo).eq(1);
+    expect(plainToInstance.data.pageSize).eq(10);
+    expect(plainToInstance.data.totalPage).eq(1);
+    expect(plainToInstance.data.totalCount).eq(1);
+    expect(plainToInstance.data.list[0]).instanceof(SimpleGirl);
+    expect(plainToInstance.data.list[0].id).eq(1);
+    expect(plainToInstance.data.list[0].age).eq(15);
+    expect(plainToInstance.data.list[0].sex).eq(0);
+    expect(plainToInstance.data.list[0].name).eq('小芳');
+  });
+
+  it('should ResponseResult<SimpleBoy>', function () {
+    const plainToInstance = classTransformer.plainToInstance<
+      ClassConstructor<ResponseResult<PageList<SimpleBoy>>>
+    >(
+      ResponseResult,
+      {
+        msg: 'ok',
+        code: 0,
+        data: {
+          list: [
+            {
+              id: 1,
+              sex: 1,
+              name: '小明',
+              age: 18,
+              createTime: '2020-12-12',
+            },
+          ],
+          pageNo: 1,
+          pageSize: 10,
+          totalCount: 1,
+          totalPage: 1,
+        },
+      },
+      {
+        scene: 'PageList<SimpleBoy>',
+      }
+    );
+
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.code).eq(0);
+    expect(plainToInstance.data).instanceof(PageList);
+    expect(plainToInstance.data.list).instanceof(Array);
+    expect(plainToInstance.data.pageNo).eq(1);
+    expect(plainToInstance.data.pageSize).eq(10);
+    expect(plainToInstance.data.totalPage).eq(1);
+    expect(plainToInstance.data.totalCount).eq(1);
+    expect(plainToInstance.data.list[0]).instanceof(SimpleBoy);
+    expect(plainToInstance.data.list[0].id).eq(1);
+    expect(plainToInstance.data.list[0].age).eq(18);
+    expect(plainToInstance.data.list[0].sex).eq(1);
+    expect(plainToInstance.data.list[0].name).eq('小明');
   });
 });
