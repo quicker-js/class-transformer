@@ -21,7 +21,7 @@ export interface EntityMetadataOption {
   /**
    * flag 用于范型类匹配 flag 使用
    */
-  readonly scenes?: Omit<SceneImpl, 'type'>[];
+  readonly scenes?: Omit<SceneImpl, 'elementType'>[];
   /**
    * subTypes 用于范型类匹配 subType 使用
    */

@@ -68,10 +68,10 @@ export class Scene<T extends {} = any> implements SceneImpl<T> {
         const metadataFlags: Scene[] = [];
         classMirror.allMetadata.forEach((e) => {
           if (e instanceof EntityMetadata && e.metadata && e.metadata.scenes) {
-            e.metadata.scenes.map((scene: Omit<SceneImpl, 'type'>) => {
+            e.metadata.scenes.map((scene: Omit<SceneImpl, 'elementType'>) => {
               const instance = Scene.create({
-                type: type,
-                elementType: scene.elementType,
+                type: scene.type || type,
+                elementType: scene.type !== type ? type : undefined,
                 subScene: scene.subScene,
                 value: scene.value,
               });
