@@ -21,7 +21,9 @@ export interface EntityMetadataOption {
   /**
    * flag 用于范型类匹配 flag 使用
    */
-  readonly scenes?: Omit<SceneImpl, 'elementType'>[];
+  readonly scenes?: Array<
+    Pick<SceneImpl, 'value' | 'subScene'> & Partial<Pick<SceneImpl, 'type'>>
+  >;
   /**
    * subTypes 用于范型类匹配 subType 使用
    */
