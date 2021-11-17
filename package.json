@@ -1,6 +1,6 @@
 {
   "name": "@quicker-js/class-transformer",
-  "version": "0.0.1-dev.2021111703",
+  "version": "0.0.1-dev.2021111704",
   "description": "class-transformer is used to convert a plain object to a class instance and the reverse process.",
   "main": "dist/cjs",
   "types": "dist/types",
@@ -54,7 +54,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "@quicker-js/class-decorator": "^0.0.1-dev.2021111301",
+    "@quicker-js/class-decorator": "^0.0.1-dev.2021111302",
     "tslib": "^2.3.1"
   }
 }
