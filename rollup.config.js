@@ -6,15 +6,15 @@ export default {
   input: 'dist/cjs/index.js',
   output: [
     {
-      name: 'ClassTransformer',
+      name: 'QuickerJSClassTransformer',
       format: 'umd',
-      file: 'dist/bundles/class-transformer.umd.js',
+      file: 'dist/bundles/index.umd.js',
       sourcemap: true,
     },
     {
-      name: 'ClassTransformer',
+      name: 'QuickerJSClassTransformer',
       format: 'umd',
-      file: 'dist/bundles/class-transformer.umd.min.js',
+      file: 'dist/bundles/index.umd.min.js',
       sourcemap: true,
       plugins: [terser()],
     },

@@ -143,7 +143,21 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
     } else if (ClassOperationExecutor.equal(targetType, Array)) {
       if (elementType) {
         if (Array.isArray(value)) {
-          return value.map((o) => this.transform(elementType, null, o));
+          const v = value.map((o) => this.transform(elementType, null, o));
+          v[ClassOperationExecutor.listInstanceName as any] = elementType;
+          return v;
+        } else {
+          return undefined;
+        }
+      }
+    } else if (ClassOperationExecutor.equal(targetType, Set)) {
+      if (elementType) {
+        if (Array.isArray(value) || value instanceof Set) {
+          const v: any = new Set(
+            Array.from(value).map((o) => this.transform(elementType, null, o))
+          );
+          v[ClassOperationExecutor.listInstanceName as any] = elementType;
+          return v;
         } else {
           return undefined;
         }
@@ -514,9 +528,15 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
     }
   }
 
-  public static sceneName = Symbol(
-    process && process.env.NODE_ENV === 'production' ? '_' : 'scene'
-  );
+  /**
+   * 场景名称
+   */
+  public static sceneName = Symbol('_scene');
+
+  /**
+   * 数组元素的实例名称
+   */
+  public static listInstanceName = Symbol('_instance');
 }
 
 export interface ClassOperationExecutorImpl {
