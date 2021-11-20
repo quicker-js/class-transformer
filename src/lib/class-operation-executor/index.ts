@@ -59,6 +59,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
         value = o;
       }
     }
+
     // 如果elementType存在 则转换的类型可能是Array | Set | Map
     if (elementType) {
       const classOperationExecutor = ClassOperationExecutor.create({
@@ -90,7 +91,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
         ClassOperationExecutor.collectionElements.set(v, elementType);
 
         return v;
-      } else if (ClassOperationExecutor.equal(elementType, Map)) {
+      } else if (ClassOperationExecutor.equal(targetType, Map)) {
         if (
           typeof value === 'object' &&
           value !== null &&
