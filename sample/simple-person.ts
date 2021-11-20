@@ -29,7 +29,7 @@ export class SimplePerson {
   public name: string;
 
   @Prop({
-    transform: (value) => moment(value).format('YYYY-MM-DD'),
+    transform: (value) => moment(value),
     toPlainOnly: true,
   })
   public createTime: Date;

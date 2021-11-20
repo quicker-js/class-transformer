@@ -3,6 +3,7 @@ import { describe, it } from 'mocha';
 import classTransformer from '../src';
 import { SimpleBoy, SimpleGirl, SimpleUsage2, SimpleUsage3 } from '../sample';
 import { expect } from 'chai';
+import moment from 'moment';
 
 describe('simple-usage-3.spec.ts', () => {
   it('should plain to instance 1.', () => {
@@ -45,8 +46,8 @@ describe('simple-usage-3.spec.ts', () => {
     expect(simpleUsage.children[0]).instanceof(SimpleBoy);
     expect(simpleUsage.children[1]).instanceof(SimpleGirl);
 
-    expect(simpleUsage.children[0].createTime).instanceof(Date);
-    expect(simpleUsage.children[1].createTime).instanceof(Date);
+    expect(moment.isMoment(simpleUsage.children[0].createTime)).eq(true);
+    expect(moment.isMoment(simpleUsage.children[1].createTime)).eq(true);
 
     expect(simpleUsage.children[0].name).eq('小明');
     expect(simpleUsage.children[1].name).eq('小芳');
@@ -97,19 +98,19 @@ describe('simple-usage-3.spec.ts', () => {
     expect(simpleUsage.children[0].name).eq('小芳');
     expect(simpleUsage.children[0].sex).eq(0);
     expect(simpleUsage.children[0].age).eq(19);
-    expect(simpleUsage.children[0].createTime).instanceof(Date);
+    expect(moment.isMoment(simpleUsage.children[0].createTime)).eq(true);
 
     expect(simpleUsage.children[1].id).eq(1);
     expect(simpleUsage.children[1].name).eq('张三');
     expect(simpleUsage.children[1].sex).eq(1);
     expect(simpleUsage.children[1].age).eq(18);
-    expect(simpleUsage.children[1].createTime).instanceof(Date);
+    expect(moment.isMoment(simpleUsage.children[1].createTime)).eq(true);
 
     expect(simpleUsage.person.id).eq(1);
     expect(simpleUsage.person.name).eq('张三');
     expect(simpleUsage.person.sex).eq(1);
     expect(simpleUsage.person.age).eq(18);
-    expect(simpleUsage.person.createTime).instanceof(Date);
+    expect(moment.isMoment(simpleUsage.person.createTime)).eq(true);
   });
 
   it('should SimpleUsage1 plain list', () => {

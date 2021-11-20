@@ -20,7 +20,8 @@ export class SimpleUsage1 {
       },
       {
         value: 1,
-        type: SimpleBoy,
+        type: Array,
+        elementType: SimpleBoy,
       }
     ),
   })

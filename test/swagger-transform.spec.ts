@@ -9,11 +9,12 @@ describe('swagger-transform.spec.ts', () => {
       SwaggerApi,
       require('./v2.json')
     );
+
     const responseResult = swaggerApi.definitions.get(
       'ResponseResult«List«Order»»'
     );
     if (responseResult) {
-      console.log(responseResult.properties);
+      // console.log(responseResult.properties);
     }
   });
 
@@ -22,5 +23,7 @@ describe('swagger-transform.spec.ts', () => {
       SwaggerApi,
       require('./v3.json')
     );
+
+    console.log(classTransformer.instanceToPlain(swaggerApi));
   });
 });

@@ -28,14 +28,14 @@ describe('response-result.spec.ts', () => {
       }
     );
 
-    // expect(plainToInstance.msg).eq('ok');
-    // expect(plainToInstance.data).instanceof(Array);
-    // expect(plainToInstance.data[0]).instanceof(SimpleBoy);
-    // expect(plainToInstance.data[0].sex).eq(1);
-    // expect(plainToInstance.data[0].name).eq('张三');
-    // expect(plainToInstance.data[0].age).eq(10);
-    // expect(plainToInstance.data[0].id).eq(1);
-    // expect(plainToInstance.code).eq(1);
+    expect(plainToInstance.msg).eq('ok');
+    expect(plainToInstance.data).instanceof(Array);
+    expect(plainToInstance.data[0]).instanceof(SimpleBoy);
+    expect(plainToInstance.data[0].sex).eq(1);
+    expect(plainToInstance.data[0].name).eq('张三');
+    expect(plainToInstance.data[0].age).eq(10);
+    expect(plainToInstance.data[0].id).eq(1);
+    expect(plainToInstance.code).eq(1);
   });
 
   it('should ResponseResult<SimpleBoy>', function () {
