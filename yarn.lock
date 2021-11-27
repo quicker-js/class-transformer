@@ -959,10 +959,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@quicker-js/class-decorator@^0.0.1-dev.2021111702":
-  version "0.0.1-dev.2021111702"
-  resolved "https://registry.yarnpkg.com/@quicker-js/class-decorator/-/class-decorator-0.0.1-dev.2021111702.tgz#d6ca65d6895e8fb353ecd7a41c4d92ff2e5cd5e5"
-  integrity sha512-W29GTuoGsSLZQBLrtzyuwbLz94GrdeUebaPn/JMzHgsf1AUxVuwJQOcqX1n8iqwDHLOXLjCIGAf/l5V08zJupg==
+"@quicker-js/class-decorator@^1.0.0":
+  version "1.0.0"
+  resolved "http://registry.npm.mingqi-tech.cn:4873/@quicker-js%2fclass-decorator/-/class-decorator-1.0.0.tgz#1fd76fa64e4e082a11ce498cf214c994808792d2"
+  integrity sha512-gpIPDhb3iijhQkFqdgb9+u6arF2kAo98EFO0qSNFuByRG2WMt8z+y0PPDzkSsG2DG+pvehY8kEwzCwh8FIPsOw==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.8"
