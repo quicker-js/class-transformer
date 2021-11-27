@@ -399,7 +399,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
           );
 
           /// 使用过装饰器 但没有用Prop装饰器
-          if (find) {
+          if (!find) {
             instance[propertyKey as any] = ClassOperationExecutor.create({
               scene: undefined,
               classTransformer: this.classTransformer,
