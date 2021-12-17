@@ -264,7 +264,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
           if (metadata) {
             if (metadata.type === 'self' && propMetadata.target) {
               (metadata as { type: ClassConstructor } as any).type =
-                propMetadata.target.constructor;
+                propertyMirror.target.constructor;
             }
             const {
               name,
