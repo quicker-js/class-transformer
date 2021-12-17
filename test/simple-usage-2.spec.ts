@@ -22,7 +22,7 @@ describe('simple-usage-2.spec.ts', () => {
           id: 1,
           name: '小明',
           sex: 1,
-          age: 19,
+          age: '19',
           createTime: '2020-01-01',
         },
       },

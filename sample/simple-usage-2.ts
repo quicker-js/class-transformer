@@ -1,6 +1,6 @@
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
-import { Entity, Scene, Prop, SubType } from '../src';
+import { Entity, Scene, SubType, Prop } from '../src';
 
 @Entity({
   title: 'SimpleUsage2',
@@ -43,4 +43,21 @@ export class SimpleUsage2 {
     ),
   })
   public children: SimpleGirl | SimpleBoy;
+}
+
+/**
+ * @class AccountLoginLoginPc
+ */
+export class AccountLoginLoginPc {
+  /**
+   * 账号
+   */
+  @Prop.default
+  public account: string;
+
+  /**
+   * 密码
+   */
+  @Prop.default
+  public pwd: string;
 }

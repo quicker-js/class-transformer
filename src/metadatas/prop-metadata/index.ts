@@ -21,7 +21,7 @@ export interface BasePropMetadata {
 }
 
 export interface PropTypeMetadata extends BasePropMetadata {
-  readonly type?: ClassConstructor;
+  readonly type?: ClassConstructor | 'self';
   readonly scenes?: never;
   readonly transform?: never;
   readonly subTypes?: never;

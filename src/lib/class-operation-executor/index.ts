@@ -262,6 +262,10 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
           /// 如果这个装饰器有元数据
           const { metadata } = propMetadata;
           if (metadata) {
+            if (metadata.type === 'self' && propMetadata.target) {
+              (metadata as { type: ClassConstructor } as any).type =
+                propMetadata.target.constructor;
+            }
             const {
               name,
               transform,
