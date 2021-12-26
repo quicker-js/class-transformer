@@ -5,6 +5,7 @@ import {
 } from '@quicker-js/class-decorator';
 import { ClassOperationExecutor } from '../class-operation-executor';
 import { TransformationType } from '../../enums';
+import { PropMetadata } from '../../metadatas';
 
 /**
  * @class ClassTransformer
@@ -54,32 +55,95 @@ export class ClassTransformer {
    * @param value
    * @param options
    */
-  public plainToInstance<T extends ClassConstructor>(
-    type: T,
-    value: Partial<Record<keyof InstanceType<T>, any>>,
-    options: { scene?: any } = {}
-  ): InstanceType<T> {
+  public plainToInstance<
+    T extends {},
+    V extends Record<keyof T | string | symbol, T[keyof T] | any>
+  >(type: ClassConstructor<T>, value: V, options: { scene?: any } = {}): T {
     return ClassOperationExecutor.create({
       scene: options.scene,
       classTransformer: this,
       type: TransformationType.PLAIN_TO_INSTANCE,
-    }).transform(type, null, value) as InstanceType<T>;
+    }).transform(type, null, value) as T;
   }
 
   /**
    * 实例转plain
    * @param instance
    */
-  public instanceToPlain(instance: any): any {
-    return JSON.stringify(
-      ClassOperationExecutor.create({
-        classTransformer: this,
-        type: TransformationType.INSTANCE_TO_PLAIN,
-        scene: ClassOperationExecutor.getSceneFromValue(instance),
-      }).transform(instance.constructor, null, instance),
-      null,
-      2
-    );
+  public instanceToPlain<R = any, T = any>(
+    instance: T
+  ): ToPlainReturnType<T, R> {
+    if (
+      instance === undefined ||
+      instance === null ||
+      instance instanceof Date ||
+      instance instanceof RegExp ||
+      instance instanceof Symbol ||
+      instance instanceof Number ||
+      instance instanceof String ||
+      typeof instance === 'number' ||
+      typeof instance === 'function' ||
+      typeof instance === 'boolean' ||
+      typeof instance === 'string'
+    ) {
+      return instance as ToPlainReturnType<T, R>;
+    }
+
+    if (Array.isArray(instance) || instance instanceof Set) {
+      return Array.from(instance).map<R>((o) => {
+        return this.instanceToPlain(o);
+      }) as ToPlainReturnType<T, R>;
+    }
+    if (instance instanceof Map) {
+      const o: Record<any, any> = {};
+      instance.forEach((v, k) => {
+        o[k as keyof R] = this.instanceToPlain(v);
+      });
+      return o as ToPlainReturnType<T, R>;
+    }
+    const { constructor } = instance as any;
+    if (constructor) {
+      const classMirror = ClassMirror.reflect(constructor);
+      const newInstance: Record<any, any> = {};
+      const propertyMirrors = classMirror.getPropertyMirrors(true);
+      propertyMirrors.forEach((propertyMirror) => {
+        const { propertyKey, metadata } = propertyMirror;
+        /// 缓存原始数据
+        const originValue = (instance as any)[propertyKey];
+        let newValue = undefined;
+        /// 每个成员的元数据遍历
+        metadata.forEach((propMetadata) => {
+          /// 只取PropMetadata
+          if (propMetadata instanceof PropMetadata) {
+            /// 如果这个装饰器有元数据
+            const { metadata } = propMetadata;
+            if (metadata) {
+              const { name, transform } = metadata;
+              if (!metadata.toPlainOnly) {
+                if (typeof transform === 'function') {
+                  newValue = transform(
+                    originValue,
+                    instance,
+                    propertyMirror,
+                    classMirror
+                  );
+                } else {
+                  newValue = originValue;
+                }
+                newInstance[name || propertyKey] =
+                  this.instanceToPlain(newValue);
+              }
+            }
+          }
+        });
+
+        if (newValue === undefined && originValue !== undefined) {
+          newInstance[propertyKey as string] = originValue;
+        }
+      });
+      return newInstance as ToPlainReturnType<T, R>;
+    }
+    return undefined as ToPlainReturnType<T, R>;
   }
 
   /**
@@ -107,3 +171,26 @@ export interface ClassTransformerOption {
     o: ParameterMirror
   ) => any;
 }
+
+export type ToPlainReturnType<T, R> = T extends
+  | null
+  | number
+  | string
+  | undefined
+  | boolean
+  | Number
+  | Boolean
+  | RegExp
+  | Date
+  | Function
+  | Symbol
+  ? T
+  : T extends Set<any>
+  ? R[]
+  : T extends Map<any, any>
+  ? Record<keyof R, R[keyof R]>
+  : T extends any[]
+  ? R[]
+  : T;
+
+new ClassTransformer().instanceToPlain([new ClassTransformer()]);

@@ -20,7 +20,7 @@ export class SimplePerson {
     toInstanceOnly: true,
   })
   @Prop({
-    type: String,
+    type: Number,
     toPlainOnly: true,
   })
   public age: number;
@@ -29,8 +29,14 @@ export class SimplePerson {
   public name: string;
 
   @Prop({
+    name: 'createDate',
     transform: (value) => moment(value),
     toPlainOnly: true,
+  })
+  @Prop({
+    name: 'createDate',
+    transform: (value) => moment(value).format('YYYY-MM-DD'),
+    toInstanceOnly: true,
   })
   public createTime: Date;
 }

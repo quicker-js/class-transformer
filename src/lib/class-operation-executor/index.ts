@@ -17,8 +17,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
    */
   public constructor(
     public readonly scene: any,
-    public readonly classTransformer: ClassTransformer,
-    public type: TransformationType
+    public readonly classTransformer: ClassTransformer
   ) {}
 
   /**
@@ -46,18 +45,16 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
     | RegExp
     | Number
     | Promise<T> {
-    if (this.type === TransformationType.INSTANCE_TO_PLAIN) {
-      if (value instanceof Set) {
-        value = Array.from(value);
-      }
+    if (value instanceof Set) {
+      value = Array.from(value);
+    }
 
-      if (value instanceof Map) {
-        const o: Record<PropertyKey, any> = {};
-        value.forEach((v, k) => {
-          o[k] = v;
-        });
-        value = o;
-      }
+    if (value instanceof Map) {
+      const o: Record<PropertyKey, any> = {};
+      value.forEach((v, k) => {
+        o[k] = v;
+      });
+      value = o;
     }
 
     // 如果elementType存在 则转换的类型可能是Array | Set | Map
@@ -65,7 +62,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
       const classOperationExecutor = ClassOperationExecutor.create({
         scene: undefined,
         classTransformer: this.classTransformer,
-        type: this.type,
       });
       if (ClassOperationExecutor.equal(targetType, Array)) {
         if (!Array.isArray(value)) {
@@ -131,7 +127,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                   ClassOperationExecutor.create({
                     scene: undefined,
                     classTransformer: this.classTransformer,
-                    type: this.type,
                   }).transform(elementType, null, res)
                 );
               })
@@ -156,9 +151,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
       if (!Array.isArray(value)) {
         return undefined;
       }
-      if (this.type === TransformationType.INSTANCE_TO_PLAIN) {
-        return value;
-      }
       return new Set(value);
     }
 
@@ -166,9 +158,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
     if (ClassOperationExecutor.equal(targetType, Map)) {
       const map = new Map();
       if (typeof value === 'object' && value !== null) {
-        if (this.type === TransformationType.INSTANCE_TO_PLAIN) {
-          return value;
-        }
         Object.getOwnPropertyNames(value).forEach((key) => {
           map.set(key, value[key]);
         });
@@ -266,29 +255,15 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
               (metadata as { type: ClassConstructor } as any).type =
                 propertyMirror.target.constructor;
             }
-            const {
-              name,
-              transform,
-              type,
-              subTypes,
-              toPlainOnly,
-              toInstanceOnly,
-              scenes,
-            } = metadata;
+            const { name, transform, type, subTypes, toInstanceOnly, scenes } =
+              metadata;
             if (name) {
               // 如果有name 则按name取值处理
               v = value[name];
             }
 
-            const isToInstanceOnly = toInstanceOnly
-              ? this.type === TransformationType.PLAIN_TO_INSTANCE
-              : true;
-
-            const isToPlainOnly = toPlainOnly
-              ? this.type === TransformationType.INSTANCE_TO_PLAIN
-              : true;
-
-            if (isToInstanceOnly || isToPlainOnly) {
+            /// 过滤非instance转换的装饰器
+            if (!toInstanceOnly) {
               if (subTypes) {
                 if (
                   Array.isArray(v) &&
@@ -301,7 +276,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                       if (o.match(item)) {
                         v2 = ClassOperationExecutor.create({
                           scene: undefined,
-                          type: this.type,
                           classTransformer: this.classTransformer,
                         }).transform(o.type, null, item);
                       }
@@ -319,7 +293,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                         ClassOperationExecutor.create({
                           scene: undefined,
                           classTransformer: this.classTransformer,
-                          type: this.type,
                         }).transform(o.type, null, v);
                     }
                   });
@@ -332,7 +305,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                       ClassOperationExecutor.create({
                         scene: scene.subScene,
                         classTransformer: this.classTransformer,
-                        type: this.type,
                       });
 
                     /// 如果scene.type类型是数组类型
@@ -377,13 +349,11 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
                   instance[propertyKey as any] = ClassOperationExecutor.create({
                     scene: undefined,
                     classTransformer: this.classTransformer,
-                    type: this.type,
                   }).transform(designType, type, v);
                 } else {
                   instance[propertyKey as any] = ClassOperationExecutor.create({
                     scene: undefined,
                     classTransformer: this.classTransformer,
-                    type: this.type,
                   }).transform(type, null, v);
                 }
               }
@@ -393,7 +363,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
             instance[propertyKey as any] = ClassOperationExecutor.create({
               scene: undefined,
               classTransformer: this.classTransformer,
-              type: this.type,
             }).transform(propertyMirror.getDesignType(), null, v);
           }
         } else {
@@ -407,7 +376,6 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
             instance[propertyKey as any] = ClassOperationExecutor.create({
               scene: undefined,
               classTransformer: this.classTransformer,
-              type: this.type,
             }).transform(designType, null, value);
           }
         }
@@ -454,11 +422,7 @@ export class ClassOperationExecutor implements ClassOperationExecutorImpl {
   public static create(
     option: ClassOperationExecutorImpl
   ): ClassOperationExecutor {
-    return new ClassOperationExecutor(
-      option.scene,
-      option.classTransformer,
-      option.type || TransformationType.PLAIN_TO_INSTANCE
-    );
+    return new ClassOperationExecutor(option.scene, option.classTransformer);
   }
 
   /**
