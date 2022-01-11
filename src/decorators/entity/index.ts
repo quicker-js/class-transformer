@@ -1,5 +1,5 @@
 import { ClassMirror } from '@quicker-js/class-decorator';
-import { EntityMetadataOption, EntityMetadata } from '../../metadatas';
+import { EntityMetadata, EntityMetadataOption } from '../../lib';
 
 /**
  * 带参数实体装饰器

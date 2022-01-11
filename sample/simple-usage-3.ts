@@ -1,6 +1,7 @@
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
-import { Entity, Scene, Prop, SubType } from '../src';
+import { Entity, Typed, TypeMirror } from '../src';
+import { TypedArray } from '../src/decorators/typed-array';
 
 @Entity({
   title: 'SimpleUsage3',
@@ -9,38 +10,36 @@ import { Entity, Scene, Prop, SubType } from '../src';
  * @class SimpleUsage3
  */
 export class SimpleUsage3 {
-  @Prop.default
+  @Typed()
   public id: number;
 
-  @Prop({
-    scenes: Scene.from(
-      {
-        value: 0,
-        type: SimpleGirl,
-      },
-      {
-        value: 1,
-        type: SimpleBoy,
-      }
-    ),
+  @Typed(SimpleGirl, {
+    scenes: [{ value: 0 }],
+  })
+  @Typed(SimpleBoy, {
+    scenes: [{ value: 1 }],
   })
   public person: SimpleBoy | SimpleGirl;
 
-  @Prop({
-    subTypes: SubType.from(
+  @TypedArray(
+    TypeMirror.createWhereMirror(
       {
-        type: SimpleBoy,
-        where: {
-          sex: 1,
-        },
+        subType: SimpleBoy,
+        wheres: [
+          {
+            sex: 1,
+          },
+        ],
       },
       {
-        type: SimpleGirl,
-        where: {
-          sex: 0,
-        },
+        subType: SimpleGirl,
+        wheres: [
+          {
+            sex: 0,
+          },
+        ],
       }
-    ),
-  })
+    )
+  )
   public children: SimpleGirl[] | SimpleBoy[];
 }

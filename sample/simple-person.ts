@@ -1,42 +1,37 @@
-import { Entity, Prop } from '../src';
 import moment from 'moment';
+import { Typed } from '../src';
 
-@Entity({
-  title: 'SimplePerson',
-  description: 'SimplePerson 实体基类',
-})
 /**
  * @class SimplePerson
  */
 export class SimplePerson {
-  @Prop.default
+  @Typed()
+  public path: RegExp;
+
+  @Typed()
   public sex: number;
 
-  @Prop.default
+  @Typed()
   public id: number;
 
-  @Prop({
-    type: Number,
-    toInstanceOnly: true,
-  })
-  @Prop({
-    type: Number,
-    toPlainOnly: true,
-  })
+  @Typed()
   public age: number;
 
-  @Prop.default
+  @Typed()
   public name: string;
 
-  @Prop({
+  @Typed(Date, {
     name: 'createDate',
-    transform: (value) => moment(value),
-    toPlainOnly: true,
-  })
-  @Prop({
-    name: 'createDate',
-    transform: (value) => moment(value).format('YYYY-MM-DD'),
+    transform: (current) => moment(current),
     toInstanceOnly: true,
   })
+  @Typed(Date, {
+    name: 'createDate',
+    transform: (current) => moment(current).format('YYYY-MM-DD HH:mm:ss'),
+    toPlainOnly: true,
+  })
   public createTime: Date;
+
+  @Typed(SimplePerson)
+  public child: SimplePerson;
 }

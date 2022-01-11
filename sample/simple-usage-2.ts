@@ -1,6 +1,6 @@
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
-import { Entity, Scene, SubType, Prop } from '../src';
+import { Entity, Typed, TypeMirror } from '../src';
 
 @Entity({
   title: 'SimpleUsage2',
@@ -9,39 +9,25 @@ import { Entity, Scene, SubType, Prop } from '../src';
  * @class SimpleUsage2
  */
 export class SimpleUsage2 {
-  @Prop({ type: Number })
+  @Typed()
   public id: number;
 
-  @Prop({
-    scenes: Scene.from(
-      {
-        value: 1,
-        type: SimpleBoy,
-      },
-      {
-        value: 0,
-        type: SimpleGirl,
-      }
-    ),
-  })
+  @Typed(SimpleBoy, { scenes: [{ value: 1 }] })
+  @Typed(SimpleGirl, { scenes: [{ value: 0 }] })
   public person: SimpleBoy | SimpleGirl;
 
-  @Prop({
-    subTypes: SubType.from(
+  @Typed(
+    TypeMirror.createWhereMirror(
       {
-        type: SimpleBoy,
-        where: {
-          sex: 1,
-        },
+        subType: SimpleGirl,
+        wheres: [{ sex: 0 }],
       },
       {
-        type: SimpleGirl,
-        where: {
-          sex: 0,
-        },
+        subType: SimpleBoy,
+        wheres: [{ sex: 1 }],
       }
-    ),
-  })
+    )
+  )
   public children: SimpleGirl | SimpleBoy;
 }
 
@@ -52,12 +38,12 @@ export class AccountLoginLoginPc {
   /**
    * 账号
    */
-  @Prop.default
+  @Typed()
   public account: string;
 
   /**
    * 密码
    */
-  @Prop.default
+  @Typed()
   public pwd: string;
 }

@@ -1,6 +1,8 @@
-import { Entity, Scene, Prop, SubType } from '../src';
+import { Entity, Typed } from '../src';
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
+import { TypedArray } from '../src/decorators/typed-array';
+import { SimplePerson } from './simple-person';
 
 @Entity({
   title: 'SimpleUsage1',
@@ -9,51 +11,17 @@ import { SimpleGirl } from './simple-girl';
  * @class SimpleUsage1
  */
 export class SimpleUsage1 {
-  @Prop.default
+  @Typed(Number)
   public id: number;
 
-  @Prop({
-    scenes: Scene.from(
-      {
-        value: 0,
-        type: SimpleGirl,
-      },
-      {
-        value: 1,
-        type: Array,
-        elementType: SimpleBoy,
-      }
-    ),
-  })
-  public person: SimpleBoy[] | SimpleGirl[];
+  @Typed(SimplePerson)
+  public person: SimplePerson;
 
-  @Prop({
-    subTypes: SubType.from(
-      {
-        type: SimpleBoy,
-        where: {
-          sex: 1,
-        },
-      },
-      {
-        type: SimpleGirl,
-        where: {
-          sex: 0,
-        },
-      },
-      {
-        type: SimpleGirl,
-        where: {
-          sex: '女',
-        },
-      },
-      {
-        type: SimpleGirl,
-        where: {
-          sex: SimpleGirl,
-        },
-      }
-    ),
+  @TypedArray(SimpleGirl, {
+    scenes: [{ value: 0 }],
   })
-  public children: SimpleGirl[] | SimpleBoy[];
+  @TypedArray(SimpleBoy, {
+    scenes: [{ value: 1 }],
+  })
+  public children: SimpleBoy[] | SimpleGirl[];
 }

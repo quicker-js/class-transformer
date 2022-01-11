@@ -1,50 +1,33 @@
 import { SimpleBoy } from './simple-boy';
 import { SimpleGirl } from './simple-girl';
-import { Entity, Prop, Scene } from '../src';
+import { Entity, Typed } from '../src';
+import { TypedArray } from '../src/decorators/typed-array';
 
 @Entity({
-  scenes: [
-    {
-      value: 'PageList<SimpleGirl>',
-      subScene: 'SimpleGirl',
-    },
-  ],
+  title: 'PageList',
+  description: 'PageList<T>',
 })
 /**
  * @class PageList<T>
  */
 export class PageList<T> {
-  @Prop({
-    scenes: Scene.from(
-      {
-        type: SimpleBoy,
-        value: 'SimpleBoy',
-      },
-      {
-        type: SimpleGirl,
-        value: 'SimpleGirl',
-      }
-    ),
+  @TypedArray(SimpleBoy, {
+    scenes: [{ value: 'SimpleBoy' }],
+  })
+  @TypedArray(SimpleGirl, {
+    scenes: [{ value: 'SimpleGirl' }],
   })
   public list: T[];
 
-  @Prop({
-    type: Number,
-  })
+  @Typed(Number)
   public pageNo: number;
 
-  @Prop({
-    type: Number,
-  })
+  @Typed(Number)
   public pageSize: number;
 
-  @Prop({
-    type: Number,
-  })
+  @Typed(Number)
   public totalCount: number;
 
-  @Prop({
-    type: Number,
-  })
+  @Typed(Number)
   public totalPage: number;
 }

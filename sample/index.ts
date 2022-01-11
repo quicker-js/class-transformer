@@ -6,4 +6,3 @@ export * from './simple-usage-2';
 export * from './simple-usage-3';
 export * from './page-list';
 export * from './response-result';
-export * from './response-ok';

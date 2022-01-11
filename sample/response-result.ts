@@ -1,59 +1,35 @@
 import { PageList } from './page-list';
 import { SimpleGirl } from './simple-girl';
 import { SimpleBoy } from './simple-boy';
-import { Scene, Prop } from '../src';
+import { Typed, TypedArray } from '../src';
 
 /**
  * 响应数据类型
  */
-export class ResponseResult<T> {
-  @Prop.default
+export class ResponseResult<T = any> {
+  @Typed()
   public msg: string;
 
-  @Prop.default
+  @Typed()
   public code: number;
 
-  @Prop({
-    scenes: Scene.from(
-      {
-        type: PageList,
-        value: 'PageList<SimpleBoy>',
-        subScene: 'SimpleBoy',
-      },
-      {
-        type: PageList,
-        value: 'PageList<SimpleGirl>',
-        subScene: 'SimpleGirl',
-      },
-      {
-        type: SimpleGirl,
-        value: 'SimpleGirl',
-      },
-      {
-        type: Set,
-        elementType: SimpleGirl,
-        value: 'Set<SimpleGirl>',
-      },
-      {
-        type: Array,
-        elementType: SimpleGirl,
-        value: 'List<SimpleGirl>',
-      },
-      {
-        type: SimpleBoy,
-        value: 'SimpleBoy',
-      },
-      {
-        type: Array,
-        elementType: SimpleBoy,
-        value: 'List<SimpleBoy>',
-      },
-      {
-        type: Set,
-        elementType: SimpleBoy,
-        value: 'Set<SimpleBoy>',
-      }
-    ),
+  @Typed(PageList, {
+    scenes: [
+      { value: 'PageList<SimpleBoy>', subValue: 'SimpleBoy' },
+      { value: 'PageList<SimpleGirl>', subValue: 'SimpleGirl' },
+    ],
+  })
+  @Typed(SimpleGirl, {
+    scenes: [{ value: 'SimpleGirl' }],
+  })
+  @Typed(SimpleBoy, {
+    scenes: [{ value: 'SimpleBoy' }],
+  })
+  @TypedArray(SimpleGirl, {
+    scenes: [{ value: 'List<SimpleGirl>', subValue: 'SimpleGirl' }],
+  })
+  @TypedArray(SimpleBoy, {
+    scenes: [{ value: 'List<SimpleBoy>', subValue: 'SimpleBoy' }],
   })
   public data: T;
 }
