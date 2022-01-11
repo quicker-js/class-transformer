@@ -17,11 +17,11 @@ export class TransformToNumber extends BasePlugin {
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
     value: any
-  ): number => {
+  ): number | undefined => {
     return Utils.toNumber(value);
   };
 
-  public toPlain = (value: any): number => {
+  public toPlain = (value: any): number | undefined => {
     return Utils.toNumber(value);
   };
 }

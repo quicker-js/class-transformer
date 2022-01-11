@@ -38,7 +38,7 @@ export class Utils {
    * 转换为数字
    * @param value
    */
-  public static toNumber = (value: any): number => {
+  public static toNumber = (value: any): number | undefined => {
     if (typeof value === 'number') {
       return value;
     }
@@ -51,7 +51,6 @@ export class Utils {
     ) {
       return Number(value);
     }
-    return NaN;
   };
 
   /**
