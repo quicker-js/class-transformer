@@ -117,7 +117,7 @@ export class TypeMirror<
   public constructor(
     public type: (
       values?: any
-    ) => ClassConstructor<T> | SymbolConstructor | undefined,
+    ) => ClassConstructor<T> | TypedConstructorType | undefined,
     public elementType: () => E
   ) {}
 }

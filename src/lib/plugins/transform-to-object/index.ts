@@ -158,10 +158,8 @@ export class TransformToObject extends BasePlugin {
             }
           });
         } else {
-          o[propertyKey] = this.classTransformer.toPlain(
-            propertyMirror.getDesignType(),
-            v
-          );
+          const type: any = propertyMirror.getDesignType();
+          o[propertyKey] = this.classTransformer.toPlain(type, v);
         }
       });
       return o;

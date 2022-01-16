@@ -77,4 +77,5 @@ export type TypedConstructorType =
   | FunctionConstructor
   | SymbolConstructor
   | RegExpConstructor
-  | DateConstructor;
+  | DateConstructor
+  | JSON;

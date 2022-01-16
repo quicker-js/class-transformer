@@ -93,6 +93,22 @@ export class Utils {
   };
 
   /**
+   * 转换为JSON
+   * @param value
+   */
+  public static toJSON(value: any): string | undefined {
+    if (Array.isArray(value)) {
+      return JSON.stringify(value);
+    }
+
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value);
+    }
+
+    return undefined;
+  }
+
+  /**
    * 转换为正则
    * @param value
    */

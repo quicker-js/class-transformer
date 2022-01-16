@@ -20,6 +20,7 @@ import {
 } from '../plugins';
 import { TypedConstructorType } from '../metadatas';
 import { TypeMirror } from '../type-mirror';
+import { TransformToJson } from '../plugins/transform-to-json';
 
 /**
  * @class ClassTransformer
@@ -47,7 +48,8 @@ export class ClassTransformer {
       TransformToArray,
       TransformToSet,
       TransformToMap,
-      TransformToPromise
+      TransformToPromise,
+      TransformToJson
     );
   }
 
