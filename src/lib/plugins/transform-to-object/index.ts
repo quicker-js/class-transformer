@@ -132,7 +132,7 @@ export class TransformToObject extends BasePlugin {
             if (metadata) {
               const { name, toInstanceOnly, transform } = metadata;
               if (name) {
-                v = value[name];
+                v = value[propertyKey];
               }
               if (!toInstanceOnly) {
                 if (mirror) {
