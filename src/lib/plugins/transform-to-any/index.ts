@@ -1,32 +1,32 @@
-import { Utils } from '../../utils';
 import { BasePlugin } from '../base-plugin';
 import { ClassConstructor } from '@quicker-js/class-decorator';
 import { TypeMirror } from '../../type-mirror';
+import { Any } from '../../types';
 import { TypedMetadataEnumImpl, TypedMetadataImpl } from '../../metadatas';
 
 /**
- * Transform to json
- * @class TransformToJson
- * @plugin TransformToJson
+ * Transform to any
+ * @class TransformToAny
+ * @plugin TransformToAny
  */
-export class TransformToJson extends BasePlugin {
-  public static type = JSON;
+export class TransformToAny extends BasePlugin {
+  public static type = Any;
 
-  public type = JSON;
+  public type = Any;
 
-  public transform = <T extends object>(
+  public transform = <T extends {}>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
     metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
-  ): string | undefined => {
-    return Utils.toJSON(value);
+  ): any => {
+    return value;
   };
 
   public toPlain = (
     value: any,
-    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
-  ): string | undefined => {
-    return Utils.toJSON(value);
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl | undefined
+  ): any => {
+    return value;
   };
 }

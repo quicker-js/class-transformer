@@ -2,6 +2,7 @@ import { ClassConstructor } from '@quicker-js/class-decorator';
 import { BasePlugin } from '../base-plugin';
 import { Utils } from '../../utils';
 import { TypeMirror } from '../../type-mirror';
+import { TypedMetadataEnumImpl, TypedMetadataImpl } from '../../metadatas';
 
 /**
  * Transform to Map
@@ -16,6 +17,7 @@ export class TransformToMap extends BasePlugin {
   public transform = <T extends object>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): Map<PropertyKey, any> | undefined => {
     if (typeof value === 'object' && value !== null) {
@@ -30,6 +32,7 @@ export class TransformToMap extends BasePlugin {
               this.classTransformer.transform(
                 mirrorType,
                 elementType.elementType(),
+                undefined,
                 value[key],
                 {
                   scene: this.scene,
@@ -47,7 +50,10 @@ export class TransformToMap extends BasePlugin {
     }
   };
 
-  public toPlain = (value: any): Record<PropertyKey, any> | undefined => {
+  public toPlain = (
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): Record<PropertyKey, any> | undefined => {
     if (value instanceof Map) {
       const o: Record<PropertyKey, any> = {};
       value.forEach((v, k) => {

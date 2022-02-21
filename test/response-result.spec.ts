@@ -33,8 +33,6 @@ describe('response-result.spec.ts', () => {
       }
     );
 
-    console.log(plainToInstance, 'List<SimpleBoy>');
-
     expect(plainToInstance.msg).eq('ok');
     expect(plainToInstance.data).instanceof(Array);
     expect(plainToInstance.data[0]).instanceof(SimpleBoy);

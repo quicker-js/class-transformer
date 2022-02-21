@@ -2,6 +2,7 @@ import { ClassConstructor } from '@quicker-js/class-decorator';
 import { Utils } from '../../utils';
 import { BasePlugin } from '../base-plugin';
 import { TypeMirror } from '../../type-mirror';
+import { TypedMetadataEnumImpl, TypedMetadataImpl } from '../../metadatas';
 
 /**
  * Transform to RegExp
@@ -16,12 +17,16 @@ export class TransformToRegExp extends BasePlugin {
   public transform = <T extends object>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): RegExp | undefined => {
     return Utils.toRegexp(value);
   };
 
-  public toPlain = (value: any): RegExp | undefined => {
+  public toPlain = (
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): RegExp | undefined => {
     return Utils.toRegexp(value);
   };
 }

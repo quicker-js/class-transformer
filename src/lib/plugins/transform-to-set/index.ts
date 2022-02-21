@@ -1,6 +1,7 @@
 import { ClassConstructor } from '@quicker-js/class-decorator';
 import { BasePlugin } from '../base-plugin';
 import { TypeMirror } from '../../type-mirror';
+import { TypedMetadataEnumImpl, TypedMetadataImpl } from '../../metadatas';
 
 /**
  * Transform to Set
@@ -15,6 +16,7 @@ export class TransformToSet extends BasePlugin {
   public transform = <T extends object>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): Set<any> | undefined => {
     if (Array.isArray(value) || value instanceof Set) {
@@ -26,6 +28,7 @@ export class TransformToSet extends BasePlugin {
               return this.classTransformer.transform(
                 type,
                 elementType.elementType(),
+                undefined,
                 o,
                 {
                   scene: this.scene,
@@ -39,7 +42,10 @@ export class TransformToSet extends BasePlugin {
     }
   };
 
-  public toPlain = (value: any): any[] | undefined => {
+  public toPlain = (
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): any[] | undefined => {
     if (value instanceof Set) {
       return Array.from(value).map((o) =>
         this.classTransformer.instanceToPlain(o)

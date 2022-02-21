@@ -1,13 +1,17 @@
-import { ClassTransformer } from '../../class-transformer';
 import { ClassConstructor } from '@quicker-js/class-decorator';
+import { ClassTransformer } from '../../class-transformer';
+import {
+  TypedConstructorType,
+  TypedMetadataEnumImpl,
+  TypedMetadataImpl,
+} from '../../metadatas';
 import { TypeMirror } from '../../type-mirror';
-import { TypedConstructorType } from '../../metadatas';
 
 /**
  * @class BasePlugin
  */
 export abstract class BasePlugin {
-  public abstract type: TypedConstructorType;
+  public abstract type: TypedConstructorType | ClassConstructor;
 
   /**
    * constructor
@@ -24,29 +28,39 @@ export abstract class BasePlugin {
    * transform
    * @param type
    * @param elementType
+   * @param metadata
    * @param value
    */
   public abstract transform<T extends {}>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): any;
 
   /**
    * to plain
    * @param value
+   * @param metadata
    */
-  public abstract toPlain(value: any): any;
+  public abstract toPlain(
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): any;
 }
 
 export interface TransformPlugin {
-  type: TypedConstructorType;
+  type: TypedConstructorType | ClassConstructor;
   classTransformer: ClassTransformer;
   scene: string | number | undefined;
-  toPlain(value: any): any;
+  toPlain(
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): any;
   transform<T extends {}>(
     type: ClassConstructor<T> | TypedConstructorType | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): any;
 }

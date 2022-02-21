@@ -2,6 +2,7 @@ import { ClassConstructor } from '@quicker-js/class-decorator';
 import { BasePlugin } from '../base-plugin';
 import { Utils } from '../../utils';
 import { TypeMirror } from '../../type-mirror';
+import { TypedMetadataEnumImpl, TypedMetadataImpl } from '../../metadatas';
 
 /**
  * Transform to Promise
@@ -16,6 +17,7 @@ export class TransformToPromise extends BasePlugin {
   public transform = <T extends object>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): Promise<any> | undefined => {
     if (Utils.isPromise(value)) {
@@ -29,6 +31,7 @@ export class TransformToPromise extends BasePlugin {
                   ? this.classTransformer.transform(
                       mirrorType,
                       elementType.elementType(),
+                      undefined,
                       res,
                       {
                         scene: this.scene,
@@ -45,7 +48,10 @@ export class TransformToPromise extends BasePlugin {
     }
   };
 
-  public toPlain = <T = any>(value: any): Promise<T> | undefined => {
+  public toPlain = <T = any>(
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): Promise<T> | undefined => {
     if (Utils.isPromise(value)) {
       return new Promise<T>((resolve, reject) => {
         value

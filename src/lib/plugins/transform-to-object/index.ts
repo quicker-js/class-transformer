@@ -1,6 +1,10 @@
 import { ClassConstructor, ClassMirror } from '@quicker-js/class-decorator';
 import { BasePlugin } from '../base-plugin';
-import { TypedMetadata, TypedMetadataImpl } from '../../metadatas';
+import {
+  TypedMetadata,
+  TypedMetadataEnumImpl,
+  TypedMetadataImpl,
+} from '../../metadatas';
 import { TypeMirror } from '../../type-mirror';
 
 /**
@@ -16,12 +20,15 @@ export class TransformToObject extends BasePlugin {
   public transform = <T extends object>(
     type: ClassConstructor<T> | undefined,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): Object | undefined => {
     if (type && value && ![Array, Set].includes(value.constructor)) {
       const newValue = this.classTransformer.newInstance(type) as any;
       const classMirror = ClassMirror.reflect(type);
-      const propertyMirrors = classMirror.getPropertyMirrors(true);
+      // 找出所有的成员 包含父类，子类覆盖 父类成员
+      // 如果子类有装饰器，覆盖父类的装饰器
+      const propertyMirrors = classMirror.getAllProperties();
       propertyMirrors.forEach((propertyMirror) => {
         const { propertyKey } = propertyMirror;
         /// ts映射类型
@@ -30,11 +37,12 @@ export class TransformToObject extends BasePlugin {
         const originValue = newValue[propertyKey];
         /// 所有元数据
         const allMetadata =
-          propertyMirror.getMetadata<TypedMetadata<TypedMetadataImpl>>(
+          propertyMirror.getAllMetadata<TypedMetadata<TypedMetadataImpl>>(
             TypedMetadata
           );
+
         /// 有元数据 有可能用了其他装饰器 使用默认 `designType` 类型转换
-        if (allMetadata.size > 0) {
+        if (allMetadata.length > 0) {
           allMetadata.forEach((propertyMetadata) => {
             const { propertyKey } = propertyMetadata;
             let v = value[propertyKey];
@@ -59,6 +67,7 @@ export class TransformToObject extends BasePlugin {
                     newValue[propertyKey] = this.classTransformer.transform(
                       mirrorType,
                       mirror.elementType(),
+                      metadata,
                       v,
                       { scene }
                     );
@@ -76,6 +85,7 @@ export class TransformToObject extends BasePlugin {
                   newValue[propertyKey] = this.classTransformer.transform(
                     mirrorType,
                     mirror.elementType(),
+                    metadata,
                     v
                   );
                 }
@@ -83,6 +93,7 @@ export class TransformToObject extends BasePlugin {
                 newValue[propertyKey] = this.classTransformer.transform(
                   designType as ClassConstructor,
                   undefined,
+                  metadata,
                   value[propertyKey]
                 );
               }
@@ -90,6 +101,7 @@ export class TransformToObject extends BasePlugin {
               newValue[propertyKey] = this.classTransformer.transform(
                 designType as ClassConstructor,
                 undefined,
+                metadata,
                 value[propertyKey]
               );
             }
@@ -97,6 +109,7 @@ export class TransformToObject extends BasePlugin {
         } else {
           newValue[propertyKey] = this.classTransformer.transform(
             designType as ClassConstructor,
+            undefined,
             undefined,
             value[propertyKey]
           );
@@ -112,11 +125,14 @@ export class TransformToObject extends BasePlugin {
     return undefined;
   };
 
-  public toPlain = (value: any): Record<PropertyKey, any> | undefined => {
+  public toPlain = (
+    value: any,
+    metadata?: TypedMetadataImpl | TypedMetadataEnumImpl
+  ): Record<PropertyKey, any> | undefined => {
     if (typeof value === 'object' && value !== null) {
       const o: Record<PropertyKey, any> = {};
       const classMirror = ClassMirror.reflect(value.constructor);
-      const propertyMirrors = classMirror.getPropertyMirrors(true);
+      const propertyMirrors = classMirror.getAllProperties();
       propertyMirrors.forEach((propertyMirror) => {
         const allMetadata =
           propertyMirror.getMetadata<TypedMetadata<TypedMetadataImpl>>(
@@ -126,7 +142,7 @@ export class TransformToObject extends BasePlugin {
         const { propertyKey } = propertyMirror;
         let v = value[propertyKey];
 
-        if (allMetadata.size > 0) {
+        if (allMetadata.length > 0) {
           allMetadata.forEach((propertyMetadata) => {
             const { metadata, mirror } = propertyMetadata;
             if (metadata) {
@@ -140,6 +156,7 @@ export class TransformToObject extends BasePlugin {
                   if (mirrorType) {
                     o[name || propertyKey] = this.classTransformer.toPlain(
                       mirrorType,
+                      metadata,
                       v
                     );
                   }
@@ -159,7 +176,7 @@ export class TransformToObject extends BasePlugin {
           });
         } else {
           const type: any = propertyMirror.getDesignType();
-          o[propertyKey] = this.classTransformer.toPlain(type, v);
+          o[propertyKey] = this.classTransformer.toPlain(type, undefined, v);
         }
       });
       return o;

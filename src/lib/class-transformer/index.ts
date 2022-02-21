@@ -5,10 +5,12 @@ import {
 } from '@quicker-js/class-decorator';
 import {
   PluginConstructor,
+  TransformToAny,
   TransformToArray,
   TransformToBoolean,
   TransformToDate,
   TransformToFunction,
+  TransformToJson,
   TransformToMap,
   TransformToNumber,
   TransformToObject,
@@ -18,9 +20,13 @@ import {
   TransformToString,
   TransformToSymbol,
 } from '../plugins';
-import { TypedConstructorType } from '../metadatas';
 import { TypeMirror } from '../type-mirror';
-import { TransformToJson } from '../plugins/transform-to-json';
+import {
+  TypedConstructorType,
+  TypedMetadataEnumImpl,
+  TypedMetadataImpl,
+} from '../metadatas';
+import { TransformToEnum } from '../plugins/transform-to-enum';
 
 /**
  * @class ClassTransformer
@@ -44,12 +50,14 @@ export class ClassTransformer {
       TransformToSymbol,
       TransformToNumber,
       TransformToRegExp,
+      TransformToAny,
       TransformToObject,
       TransformToArray,
       TransformToSet,
       TransformToMap,
       TransformToPromise,
-      TransformToJson
+      TransformToJson,
+      TransformToEnum
     );
   }
 
@@ -62,7 +70,7 @@ export class ClassTransformer {
   ): any[] {
     const list: any[] = [];
     const classMirror = ClassMirror.reflect(targetType);
-    classMirror.parameters.forEach((o) => {
+    classMirror.getParameters().forEach((o) => {
       if (this.option && this.option.newInstanceHandler) {
         const result = this.option.newInstanceHandler(targetType, o);
         if (result) {
@@ -89,18 +97,25 @@ export class ClassTransformer {
    * transform
    * @param type
    * @param elementType
+   * @param metadata
    * @param value
    * @param option
    */
   public transform = <T extends {}, V = any>(
     type: ClassConstructor<T> | TypedConstructorType,
     elementType: TypeMirror | undefined,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: V,
     option: PlainToInstanceOptions = {}
   ): any => {
     const Plugin = this.plugins.get(type) || this.plugins.get(Object);
     if (Plugin) {
-      return new Plugin(this, option.scene).transform(type, elementType, value);
+      return new Plugin(this, option.scene).transform(
+        type,
+        elementType,
+        metadata,
+        value
+      );
     }
     return undefined;
   };
@@ -108,15 +123,17 @@ export class ClassTransformer {
   /**
    * toPlain
    * @param type
+   * @param metadata
    * @param value
    */
   public toPlain = <T = any>(
     type: TypedConstructorType | ClassConstructor,
+    metadata: TypedMetadataImpl | TypedMetadataEnumImpl | undefined,
     value: any
   ): T | undefined => {
     const Plugin = this.plugins.get(type) || this.plugins.get(Object);
     if (Plugin) {
-      return new Plugin(this, undefined).toPlain(value);
+      return new Plugin(this, undefined).toPlain(value, metadata);
     }
   };
 
@@ -134,7 +151,7 @@ export class ClassTransformer {
     value: V,
     option: PlainToInstanceOptions = {}
   ): T => {
-    return this.transform(type, undefined, value, option);
+    return this.transform(type, undefined, undefined, value, option);
   };
 
   /**
@@ -219,6 +236,7 @@ export class ClassTransformer {
     }
     return this.toPlain(
       value.constructor as any,
+      undefined,
       value
     ) as InstanceToPlainReturn<V, T>;
   }

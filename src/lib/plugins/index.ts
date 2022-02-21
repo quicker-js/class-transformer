@@ -13,3 +13,5 @@ export * from './transform-to-array';
 export * from './transform-to-set';
 export * from './transform-to-map';
 export * from './transform-to-promise';
+export * from './transform-to-any';
+export * from './transform-to-json';

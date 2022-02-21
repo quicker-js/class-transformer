@@ -1,5 +1,6 @@
 import { PropertyMetadata } from '@quicker-js/class-decorator';
 import { TypeMirror } from '../../type-mirror';
+import { EnumArray } from '../../types';
 
 /**
  * 元数据
@@ -56,7 +57,7 @@ export interface TypeMetadataTransform {
     current: any,
     values: any,
     metadata: TypedMetadata,
-    allMetadata: Set<TypedMetadata>
+    allMetadata: TypedMetadata[]
   ) => any;
 }
 
@@ -64,6 +65,10 @@ export interface Scene {
   value: string | number;
   subValue?: string | number;
 }
+
+export type TypedMetadataEnumImpl = TypedMetadataImpl & {
+  enums: EnumArray;
+};
 
 export type TypedConstructorType =
   | ObjectConstructor

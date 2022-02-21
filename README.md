@@ -9,6 +9,10 @@ npm i @quicker-js/class-transformer
 yarn add @quicker-js/class-transformer
 ```
 
+### Example Usage
+
+The following examples contain basic usage methods. For more high-level usage methods, please refer to the [test](https://github.com/quicker-js/class-transformer/tree/master/test) directory.
+
 ## Documentation
 - [ApiDocs](https://quicker-js.github.io/class-transformer/)
 - [Samples](https://github.com/quicker-js/class-transformer/tree/master/sample)
